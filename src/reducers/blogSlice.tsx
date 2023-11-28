@@ -1,10 +1,13 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { sub } from "date-fns-jalali";
 interface Blogs {
     blogs:{
         blogs: {
-            id: string;
-            title: string;
-            content: string;
+            id: string,
+            title: string,
+            content: string,
+            date: string,
+            user: number
         }[];
 
     }
@@ -18,11 +21,15 @@ const initialState = {
             id: nanoid(),
             title: "اولین پست",
             content: "اولین پست",
+            date: sub(new Date(), { days: 2, minutes: 10 }).toISOString(),
+            user: "1",
         },
         {
             id: nanoid(),
             title: "دومین پست",
-            content:"دومین پست"
+            content:"دومین پست",
+            date: sub(new Date(), { minutes: 5 }).toISOString(),
+            user: "3",
         },
     ],
 };
@@ -35,13 +42,15 @@ const blogsSlice = createSlice({
             reducer(state, action) {
                 state.blogs.push(action.payload);
             },
-            prepare(title, content) {
+            prepare(title, content, userId) {
                 //Complex logic
                 return {
                     payload: {
                         id: nanoid(),
+                        date: new Date().toISOString(),
                         title,
                         content,
+                        user: userId,
                     },
                     meta: null,
                     error: null,

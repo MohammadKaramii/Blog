@@ -1,13 +1,16 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { blogDeleted, selectBlogById } from "../reducers/blogSlice";
-
+import ShowTime from "./ShowTime";
+import ShowAuthor from "./ShowAuthor";
 interface Blogs {
     blogs:{
         blogs: {
-            id: string;
-            title: string;
-            content: string;
+            id: string,
+            title: string,
+            content: string,
+            date: string,
+            user: number
         }[];
 
     }
@@ -39,23 +42,28 @@ interface Blogs {
 
     return (
         <section>
-        <article className="blog">
-            <h2>{blog.title}</h2>
+            <article className="blog">
+                <h2>{blog.title}</h2>
 
-            <p className="blog-content">{blog.content}</p>
+                <div style={{ marginTop: "10px", marginRight: "20px" }}>
+                    <ShowTime timestamp={blog.date} />
+                    <ShowAuthor userId={blog.user} />
+                </div>
 
-            <Link to={`/editBlog/${blog.id}`} className="button">
-                ویرایش پست
-            </Link>
-            <button
-                className="muted-button"
-                style={{ marginRight: "10px" }}
-                onClick={handleDelete}
-            >
-                حذف پست
-            </button>
-        </article>
-    </section>
+                <p className="blog-content">{blog.content}</p>
+
+                <Link to={`/editBlog/${blog.id}`} className="button">
+                    ویرایش پست
+                </Link>
+                <button
+                    className="muted-button"
+                    style={{ marginRight: "10px" }}
+                    onClick={handleDelete}
+                >
+                    حذف پست
+                </button>
+            </article>
+        </section>
     );
 };
 
