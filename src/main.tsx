@@ -1,6 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+
+import { RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import { store } from "./store";
+import { router } from "./routes";
 
 
 
@@ -8,7 +13,9 @@ const rootElement = document.getElementById("root");
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <App />
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
     </StrictMode>
-  );
+  )
 }

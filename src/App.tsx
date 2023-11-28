@@ -1,21 +1,11 @@
-import { useState } from 'react'
+import BlogsList from "./components/BlogsList";
 
+const App = () => {
+    return (
+        <>
+            <BlogsList />
+        </>
+    );
+};
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-     
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-   
-    </>
-  )
-}
-
-export default App
+export default App;
