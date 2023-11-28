@@ -23,6 +23,13 @@ const initialState = {
             content: "اولین پست",
             date: sub(new Date(), { days: 2, minutes: 10 }).toISOString(),
             user: "1",
+            reactions: {
+                thumbsUp: 0,
+                hooray: 0,
+                heart: 0,
+                rocket: 0,
+                eyes: 0,
+            },
         },
         {
             id: nanoid(),
@@ -30,6 +37,13 @@ const initialState = {
             content:"دومین پست",
             date: sub(new Date(), { minutes: 5 }).toISOString(),
             user: "3",
+            reactions: {
+                thumbsUp: 0,
+                hooray: 0,
+                heart: 0,
+                rocket: 0,
+                eyes: 0,
+            },
         },
     ],
 };
@@ -70,6 +84,14 @@ const blogsSlice = createSlice({
             const { id } = action.payload;
             state.blogs = state.blogs.filter((blog) => blog.id !== id);
         },
+        reactionAdded: (state, action) => {
+            const { blogId, reaction } = action.payload;
+            const existingBlog = state.blogs.find((blog) => blog.id === blogId);
+
+            if (existingBlog) {
+                existingBlog.reactions[reaction as keyof typeof existingBlog.reactions]++;
+            }
+        },
     },
 });
 
@@ -78,6 +100,6 @@ export const selectAllBlogs = (state: Blogs ) => state.blogs.blogs;
 export const selectBlogById = (state: Blogs, blogId: string) =>
     state.blogs.blogs.find((blog) => blog.id === blogId);
 
-export const { blogAdded, blogUpdated, blogDeleted } = blogsSlice.actions;
+export const { blogAdded, blogUpdated, blogDeleted, reactionAdded } = blogsSlice.actions;
 
 export default blogsSlice.reducer;

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { blogDeleted, selectBlogById } from "../reducers/blogSlice";
 import ShowTime from "./ShowTime";
 import ShowAuthor from "./ShowAuthor";
+import ReactionButtons from "./ReactionButtons";
 interface Blogs {
     blogs:{
         blogs: {
@@ -50,6 +51,8 @@ interface Blogs {
                     <ShowAuthor userId={blog.user} />
                 </div>
 
+                <ReactionButtons blog={blog} />
+               
                 <p className="blog-content">{blog.content}</p>
 
                 <Link to={`/editBlog/${blog.id}`} className="button">
