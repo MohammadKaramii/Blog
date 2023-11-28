@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 
 import App from "../App";
 import MainLayout from "../layouts/MainLayout";
+import SingleBlogPage from "../components/SingleBlogPage";
+import CreateBlogForm from "../components/CreateBlogForm";
 
 export const router = createBrowserRouter([
     {
@@ -14,6 +16,14 @@ export const router = createBrowserRouter([
             {
                 path: "/",
                 element: <App />,
+            },
+            {
+                path: "/blogs/create-blog",
+                element: <CreateBlogForm />,
+            },
+            {
+                path: "/blogs/:blogId",
+                element: <SingleBlogPage />,
             },
         ],
     },

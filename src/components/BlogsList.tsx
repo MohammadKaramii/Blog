@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
   export interface Blog {
     blogs:{
@@ -14,7 +13,8 @@ import { Link } from "react-router-dom";
 
 const BlogsList = () => {
     const blogs = useSelector((state: Blog) => state.blogs);
-
+    const navigate = useNavigate();
+    
     const renderedBlogs = blogs.map((blog) => (
         <article className="blog-excerpt">
             <h3>{blog.title}</h3>
@@ -28,9 +28,18 @@ const BlogsList = () => {
 
     return (
         <section className="blog-list">
-            <h2>تمامی پست ها</h2>
-            {renderedBlogs}
-        </section>
+        <button
+            className="full-button accent-button"
+            style={{
+                marginTop: "1em",
+            }}
+            onClick={() => navigate("/blogs/create-blog")}
+        >
+            ساخت پست جدید
+        </button>
+        <h2>تمامی پست ها</h2>
+        {renderedBlogs}
+    </section>
     );
 };
 
