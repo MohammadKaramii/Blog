@@ -4,13 +4,14 @@ import App from "../App";
 import MainLayout from "../layouts/MainLayout";
 import SingleBlogPage from "../components/SingleBlogPage";
 import CreateBlogForm from "../components/CreateBlogForm";
+import EditBlogForm from "../components/EditBlogForm";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
         errorElement: (
-            <h3 className="text-center">موردی یافت نشد...</h3>
+            <h3 className="text-center">چیزی پیدا نکردیم متاسفانه 🤗 ...</h3>
         ),
         children: [
             {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
             {
                 path: "/blogs/:blogId",
                 element: <SingleBlogPage />,
+            },
+            {
+                path: "/editBlog/:blogId",
+                element: <EditBlogForm />,
             },
         ],
     },

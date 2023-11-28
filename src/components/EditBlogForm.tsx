@@ -1,12 +1,25 @@
 import { useState, ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { blogUpdated } from "../reducers/blogSlice";
 
-import { blogAdded } from "../reducers/blogSlice";
+ interface Blog {
+    blogs:{
+        id: string;
+        title: string;
+        content: string;
 
-const CreateBlogForm = () => {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    }[]
+  }
+const EditBlogForm = () => {
+    const { blogId } = useParams();
+
+    const blog = useSelector((state: Blog) =>
+        state.blogs.find((blog) => blog.id === blogId)
+    );
+
+    const [title, setTitle] = useState(blog?.title);
+    const [content, setContent] = useState(blog?.content);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -16,16 +29,22 @@ const CreateBlogForm = () => {
 
     const handleSubmitForm = () => {
         if (title && content) {
-            dispatch(blogAdded(title, content));
-            setTitle("");
-            setContent("");
-            navigate("/");
+            dispatch(blogUpdated({ id: blogId, title, content }));
+            navigate(`/blogs/${blogId}`);
         }
     };
 
+    if (!blog) {
+        return (
+            <section>
+                <h2>پست مورد نظر شما یافت نشد</h2>
+            </section>
+        );
+    }
+
     return (
         <section>
-            <h2>ساخت پست جدید</h2>
+            <h2>ویرایش پست</h2>
             <form autoComplete="off">
                 <label htmlFor="blogTitle">عنوان پست :</label>
                 <input
@@ -43,11 +62,11 @@ const CreateBlogForm = () => {
                     onChange={onContentChange}
                 />
                 <button type="button" onClick={handleSubmitForm}>
-                    ذخیره پست
+                    ویرایش پست
                 </button>
             </form>
         </section>
     );
 };
 
-export default CreateBlogForm;
+export default EditBlogForm;
