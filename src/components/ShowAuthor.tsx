@@ -1,17 +1,9 @@
 import { useSelector } from "react-redux";
+import { selectUserById } from "../reducers/userSlice";
+import { User } from "../types";
 
-interface User {
-    users: {
-        id: number;
-        fullname: string;
-    }[]
-}
-
-const ShowAuthor = ({ userId } : {userId : number}) => {
-    const author = useSelector((state: User) =>
-        state.users.find((user) => user.id === userId)
-    );
-
+const ShowAuthor = ({ userId } : {userId : string}) => {
+    const author = useSelector((state: User) => selectUserById(state, userId));
     return <span>توسط {author ? author.fullname : "نویسنده ناشناس"}</span>;
 };
 

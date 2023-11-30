@@ -1,24 +1,20 @@
 import { useState, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { blogAdded } from "../reducers/blogSlice";
-
-interface User {
-    users: {
-        id: number;
-        fullname: string;
-    }[]
-}
-
+import { addNewBlog } from "../reducers/blogSlice";
+import { nanoid } from "@reduxjs/toolkit";
+import { selectAllUsers } from "../reducers/userSlice";
 
 const CreateBlogForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
-
+  const [requestStatus, setRequestStatus] = useState("idle");
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const users = useSelector((state : User) => state.users);
+ 
+  const users = useSelector(selectAllUsers);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
@@ -26,17 +22,39 @@ const CreateBlogForm = () => {
     setContent(e.target.value);
   const onAuthorChanged = (e : ChangeEvent<HTMLSelectElement>) => setUserId(e.target.value);
 
-  const canSave = [title, content, userId].every(Boolean);
+  const canSave = [title, content, userId].every(Boolean) && requestStatus === "idle";
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     if (canSave) {
-      dispatch(blogAdded(title, content, userId));
-      setTitle("");
-      setContent("");
-      setUserId("");
-      navigate("/");
+        try {
+            setRequestStatus("pending");
+            await dispatch(
+                addNewBlog({
+                    id: nanoid(),
+                    date: new Date().toISOString(),
+                    title,
+                    content,
+                    user: userId,
+                    reactions: {
+                        thumbsUp: 0,
+                        hooray: 0,
+                        heart: 0,
+                        rocket: 0,
+                        eyes: 0,
+                    },
+                })
+            );
+            setTitle("");
+            setContent("");
+            setUserId("");
+            navigate("/");
+        } catch (error) {
+            console.error("Failed to save the blog", error);
+        } finally {
+            setRequestStatus("idle");
+        }
     }
-  };
+};
 
   return (
     <section>

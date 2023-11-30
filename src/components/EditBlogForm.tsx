@@ -1,20 +1,9 @@
 import { useState, ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { blogUpdated, selectBlogById } from "../reducers/blogSlice";
+import { updateApiBlog, selectBlogById } from "../reducers/blogSlice";
+import { Blog } from "../types";
 
-interface Blog {
-    blogs:{
-        blogs: {
-            id: string,
-            title: string,
-            content: string,
-            date: string,
-            user: number
-        }[];
-
-    }
-}
 
 const EditBlogForm = () => {
   const { blogId } = useParams();
@@ -32,11 +21,26 @@ const EditBlogForm = () => {
   const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setContent(e.target.value);
 
-  const handleSubmitForm = () => {
-    if (title && content) {
-      dispatch(blogUpdated({ id: blogId, title, content }));
-      navigate(`/blogs/${blogId}`);
-    }
+    const handleSubmitForm = () => {
+      if (title && content) {
+          dispatch(
+              updateApiBlog({
+                  id: blogId!,
+                  date: blog?.date!,
+                  title,
+                  content,
+                  user: blog?.user!,
+                  reactions: {
+                      thumbsUp: 0,
+                      hooray: 0,
+                      heart: 0,
+                      rocket: 0,
+                      eyes: 0,
+                  },
+              })
+          );
+          navigate(`/blogs/${blogId}`);
+      }
   };
 
   if (!blog) {

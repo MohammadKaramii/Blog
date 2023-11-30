@@ -4,23 +4,11 @@ import { blogDeleted, selectBlogById } from "../reducers/blogSlice";
 import ShowTime from "./ShowTime";
 import ShowAuthor from "./ShowAuthor";
 import ReactionButtons from "./ReactionButtons";
-interface Blogs {
-    blogs:{
-        blogs: {
-            id: string,
-            title: string,
-            content: string,
-            date: string,
-            user: number
-        }[];
+import { Blog } from "../types";
 
-    }
-}
-  
-  
   const SingleBlogPage = () => {
       const { blogId } = useParams();
-      const blog = useSelector((state: Blogs) => selectBlogById(state, blogId!));
+      const blog = useSelector((state: Blog) => selectBlogById(state, blogId!));
       const navigate = useNavigate();
       const dispatch = useDispatch();
       
